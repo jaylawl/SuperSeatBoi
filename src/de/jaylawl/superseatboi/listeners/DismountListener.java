@@ -17,11 +17,8 @@ public class DismountListener implements Listener {
     public void onDismount(EntityDismountEvent event) {
         Entity entity = event.getDismounted();
         if (entity.getType() == EntityType.SILVERFISH) {
-            for (String tag : entity.getScoreboardTags()) {
-                if (tag.equals(SuperSeatBoi.getScoreboardTagIdentifier())) {
-                    entity.remove();
-                    return;
-                }
+            if (entity.getScoreboardTags().contains(SuperSeatBoi.getScoreboardTagIdentifier())) {
+                entity.remove();
             }
         }
     }

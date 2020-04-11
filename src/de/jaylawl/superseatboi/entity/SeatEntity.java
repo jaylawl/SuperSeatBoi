@@ -16,7 +16,7 @@ public class SeatEntity {
     @SuppressWarnings("deprecation")
     public static Entity getNew(Location location) {
 
-        location.add(new Vector(0, -0.49, 0));
+        location.add(new Vector(0.5, 0, 0.5));
         Silverfish seatEntity = ((Silverfish) location.getWorld().spawnEntity(location, EntityType.SILVERFISH));
 
         seatEntity.setAI(false);

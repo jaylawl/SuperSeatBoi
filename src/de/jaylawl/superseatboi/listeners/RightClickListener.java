@@ -2,16 +2,17 @@ package de.jaylawl.superseatboi.listeners;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
 import de.jaylawl.superseatboi.entity.SeatEntity;
+import de.jaylawl.superseatboi.util.FindSeatEntity;
 import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Bisected;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class RightClickListener implements Listener {
@@ -34,6 +35,10 @@ public class RightClickListener implements Listener {
             return;
         }
 
+        if (!clickedBlock.getType().toString().contains("STAIR")) {
+            return;
+        }
+
         Bisected bisected = ((Bisected) clickedBlock.getBlockData());
         if (bisected.getHalf() == Bisected.Half.TOP) {
             return; //mountable stairs can't be upside-down
@@ -51,17 +56,19 @@ public class RightClickListener implements Listener {
 
         event.setCancelled(true);
 
-        if (player.getVelocity().getY() > -0.08) {
+        if (player.getVelocity().getY() < -0.08) {
             return; //prevent using seats to dodge fall damage
         }
 
-        SeatEntity.getNew(clickedBlock.getLocation()).addPassenger(player);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                player.sendActionBar("§f[SNEAK] to get up§r");
+        Entity existingSeat = FindSeatEntity.get(clickedBlock.getLocation());
+        if (existingSeat != null) {
+            if (existingSeat.getPassengers().isEmpty()) {
+                existingSeat.addPassenger(player);
             }
-        }.runTaskLater(SuperSeatBoi.inst(), 1L);
+            return; //seat exists or is already taken
+        }
+
+        SeatEntity.getNew(clickedBlock.getLocation()).addPassenger(player);
 
     }
 

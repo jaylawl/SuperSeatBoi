@@ -1,5 +1,7 @@
 package de.jaylawl.superseatboi;
 
+import de.jaylawl.superseatboi.listeners.BlockBreakListener;
+import de.jaylawl.superseatboi.listeners.DismountListener;
 import de.jaylawl.superseatboi.listeners.RightClickListener;
 import org.bukkit.Material;
 import org.bukkit.plugin.PluginManager;
@@ -18,6 +20,8 @@ public class SuperSeatBoi extends JavaPlugin {
 
         PluginManager pluginManager = getServer().getPluginManager();
 
+        pluginManager.registerEvents(new BlockBreakListener(), this);
+        pluginManager.registerEvents(new DismountListener(), this);
         pluginManager.registerEvents(new RightClickListener(), this);
 
     }
