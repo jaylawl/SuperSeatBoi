@@ -9,7 +9,9 @@ public class FindSeatEntity {
 
     public static Entity get(Location location) {
 
-        location = location.toBlockLocation();
+        location.setX(Math.floor(location.getX()));
+        location.setY(Math.floor(location.getY()));
+        location.setZ(Math.floor(location.getZ()));
         BoundingBox scanBox = new BoundingBox(
                 location.getX(), location.getY(), location.getZ(),
                 (location.getX() + 1), (location.getY() + 1), (location.getZ() + 1));
