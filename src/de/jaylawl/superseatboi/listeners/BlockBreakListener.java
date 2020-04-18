@@ -1,6 +1,6 @@
 package de.jaylawl.superseatboi.listeners;
 
-import de.jaylawl.superseatboi.util.FindSeatEntity;
+import de.jaylawl.superseatboi.entity.SeatEntity;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -21,7 +21,7 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
-        Entity existingSeat = FindSeatEntity.get(eventBlock.getLocation());
+        Entity existingSeat = SeatEntity.findExisting(eventBlock.getLocation());
         if (existingSeat != null) {
             existingSeat.eject();
             existingSeat.remove();

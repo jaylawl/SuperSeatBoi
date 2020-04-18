@@ -2,10 +2,13 @@ package de.jaylawl.superseatboi.listeners;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
 import de.jaylawl.superseatboi.entity.SeatEntity;
-import de.jaylawl.superseatboi.util.FindSeatEntity;
 import org.bukkit.GameMode;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class RightClickListener implements Listener {
@@ -60,7 +64,7 @@ public class RightClickListener implements Listener {
             return; //prevent using seats to dodge fall damage
         }
 
-        Entity existingSeat = FindSeatEntity.get(clickedBlock.getLocation());
+        Entity existingSeat = SeatEntity.findExisting(clickedBlock.getLocation());
         if (existingSeat != null) {
             if (existingSeat.getPassengers().isEmpty()) {
                 existingSeat.addPassenger(player);
@@ -68,7 +72,86 @@ public class RightClickListener implements Listener {
             return; //seat exists or is already taken
         }
 
-        SeatEntity.getNew(clickedBlock.getLocation()).addPassenger(player);
+        Entity seatEntity = SeatEntity.getNew(clickedBlock.getLocation());
+        seatEntity.addPassenger(player);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+
+                BlockData blockData = clickedBlock.getBlockData();
+                BlockFace facing = ((Directional) blockData).getFacing();
+                Stairs.Shape shape = ((Stairs) blockData).getShape();
+
+                Float yaw = null;
+                switch (facing) {
+                    case NORTH:
+                        switch (shape) {
+                            case STRAIGHT:
+                                yaw = 0f;
+                                break;
+                            case INNER_LEFT:
+                            case OUTER_LEFT:
+                                yaw = -45f;
+                                break;
+                            case INNER_RIGHT:
+                            case OUTER_RIGHT:
+                                yaw = 45f;
+                                break;
+                        }
+                        break;
+                    case EAST:
+                        switch (shape) {
+                            case STRAIGHT:
+                                yaw = 90f;
+                                break;
+                            case INNER_LEFT:
+                            case OUTER_LEFT:
+                                yaw = 45f;
+                                break;
+                            case INNER_RIGHT:
+                            case OUTER_RIGHT:
+                                yaw = 135f;
+                                break;
+                        }
+                        break;
+                    case SOUTH:
+                        switch (shape) {
+                            case STRAIGHT:
+                                yaw = 180f;
+                                break;
+                            case INNER_LEFT:
+                            case OUTER_LEFT:
+                                yaw = 135f;
+                                break;
+                            case INNER_RIGHT:
+                            case OUTER_RIGHT:
+                                yaw = -135f;
+                                break;
+                        }
+                        break;
+                    case WEST:
+                        switch (shape) {
+                            case STRAIGHT:
+                                yaw = -90f;
+                                break;
+                            case INNER_LEFT:
+                            case OUTER_LEFT:
+                                yaw = -135f;
+                                break;
+                            case INNER_RIGHT:
+                            case OUTER_RIGHT:
+                                yaw = -45f;
+                                break;
+                        }
+                        break;
+                }
+                if (yaw != null) {
+                    seatEntity.setRotation(yaw, 0f);
+                }
+
+            }
+        }.runTaskLater(SuperSeatBoi.inst(), 5L);
 
     }
 
