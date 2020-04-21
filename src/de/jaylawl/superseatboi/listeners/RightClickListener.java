@@ -8,6 +8,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class RightClickListener implements Listener {
 
         if (
                 event.getAction() != Action.RIGHT_CLICK_BLOCK ||
-                        event.getPlayer().getGameMode() == GameMode.SPECTATOR
+                event.getPlayer().getGameMode() == GameMode.SPECTATOR
         ) {
             return;
         }
@@ -43,14 +44,19 @@ public class RightClickListener implements Listener {
             return;
         }
 
-        Bisected bisected = ((Bisected) clickedBlock.getBlockData());
-        if (bisected.getHalf() == Bisected.Half.TOP) {
+        BlockData blockData = clickedBlock.getBlockData();
+
+        if (((Bisected) blockData).getHalf() == Bisected.Half.TOP) {
             return; //mountable stairs can't be upside-down
         }
 
         Block controlBlock = clickedBlock.getLocation().add(new Vector(0, -1, 0)).getBlock();
         if (controlBlock.getType() != SuperSeatBoi.getControlMaterial()) {
             return; //block below seat must be of this material
+        }
+
+        if (((Waterlogged) blockData).isWaterlogged()) {
+            return; //no waterlogged seating
         }
 
         Player player = event.getPlayer();
@@ -79,7 +85,6 @@ public class RightClickListener implements Listener {
             @Override
             public void run() {
 
-                BlockData blockData = clickedBlock.getBlockData();
                 BlockFace facing = ((Directional) blockData).getFacing();
                 Stairs.Shape shape = ((Stairs) blockData).getShape();
 

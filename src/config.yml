@@ -1,0 +1,22 @@
+# SuperSeatBoi
+# created by jaylawl
+#
+# Donate: http://paypal.me/langejulian
+# SpigotMC: https://www.spigotmc.org/resources/superseatboi.77321/
+# Github-page: https://github.com/jaylawl/SuperSeatBoi
+#
+# There are no in-game commands except for "/superseatboi [reload]"
+# This plugin does not require any permissions
+#
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Settings:
+  ControlBlock: REDSTONE_BLOCK #must be a valid Bukkit material enum (https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html)
+  AllowSeatingWhileFalling: true
+  AllowWaterloggedSeats: false
+  AllowSeatingWhileSneaking: false
+  AllowCreativeModeSeating: true
+  BlacklistedWorlds: []
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
