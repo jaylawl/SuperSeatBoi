@@ -1,6 +1,6 @@
-package de.jaylawl.superseatboi.listeners;
+package de.jaylawl.superseatboi.event.listener.bukkit;
 
-import de.jaylawl.superseatboi.entity.SeatEntity;
+import de.jaylawl.superseatboi.seat.SeatEntity;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -9,9 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 public class BlockBreakListener implements Listener {
-
-    public BlockBreakListener() {
-    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {

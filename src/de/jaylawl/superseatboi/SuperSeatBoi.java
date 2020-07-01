@@ -1,23 +1,24 @@
 package de.jaylawl.superseatboi;
 
-import de.jaylawl.superseatboi.listeners.BlockBreakListener;
-import de.jaylawl.superseatboi.listeners.DismountListener;
-import de.jaylawl.superseatboi.listeners.QuitListener;
-import de.jaylawl.superseatboi.listeners.RightClickListener;
+import de.jaylawl.superseatboi.event.listener.bukkit.BlockBreakListener;
+import de.jaylawl.superseatboi.event.listener.bukkit.DismountListener;
+import de.jaylawl.superseatboi.event.listener.bukkit.QuitListener;
+import de.jaylawl.superseatboi.event.listener.bukkit.RightClickListener;
+import de.jaylawl.superseatboi.seat.SeatStructure;
 import org.bukkit.Material;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SuperSeatBoi extends JavaPlugin {
 
-    private static SuperSeatBoi inst;
+    private static SuperSeatBoi INSTANCE;
+
     private final static Material CONTROL_MATERIAL = Material.REDSTONE_BLOCK;
-    private final static String SCOREBOARD_TAG_IDENTIFIER = "SuperSeatBoiSeatEntity";
 
     @Override
     public void onEnable() {
 
-        inst = this;
+        INSTANCE = this;
 
         PluginManager pluginManager = getServer().getPluginManager();
 
@@ -26,18 +27,16 @@ public class SuperSeatBoi extends JavaPlugin {
         pluginManager.registerEvents(new RightClickListener(), this);
         pluginManager.registerEvents(new QuitListener(), this);
 
+        SeatStructure.init();
+
     }
 
     public static SuperSeatBoi inst() {
-        return inst;
+        return INSTANCE;
     }
 
     public static Material getControlMaterial() {
         return CONTROL_MATERIAL;
-    }
-
-    public static String getScoreboardTagIdentifier() {
-        return SCOREBOARD_TAG_IDENTIFIER;
     }
 
 }

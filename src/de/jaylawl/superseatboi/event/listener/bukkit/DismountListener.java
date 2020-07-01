@@ -1,6 +1,6 @@
-package de.jaylawl.superseatboi.listeners;
+package de.jaylawl.superseatboi.event.listener.bukkit;
 
-import de.jaylawl.superseatboi.SuperSeatBoi;
+import de.jaylawl.superseatboi.seat.SeatEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -10,14 +10,11 @@ import org.spigotmc.event.entity.EntityDismountEvent;
 
 public class DismountListener implements Listener {
 
-    public DismountListener() {
-    }
-
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDismount(EntityDismountEvent event) {
         Entity entity = event.getDismounted();
         if (entity.getType() == EntityType.SILVERFISH) {
-            if (entity.getScoreboardTags().contains(SuperSeatBoi.getScoreboardTagIdentifier())) {
+            if (entity.getScoreboardTags().contains(SeatEntity.SCOREBOARD_TAG_IDENTIFIER)) {
                 entity.remove();
             }
         }
