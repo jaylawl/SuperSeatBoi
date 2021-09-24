@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/../__builds</output-path>
     <root id="archive" name="SuperSeatBoi.jar">
       <element id="module-output" name="SuperSeatBoi" />
-      <element id="file-copy" path="$PROJECT_DIR$/src/de/jaylawl/superseatboi/plugin.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/de/jaylawl/superseatboi/resources/plugin.yml" />
     </root>
   </artifact>
 </component>
