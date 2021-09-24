@@ -2,6 +2,7 @@ package de.jaylawl.superseatboi.event.listener.bukkit;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
 import de.jaylawl.superseatboi.seat.SeatEntity;
+import de.jaylawl.superseatboi.seat.SeatManager;
 import de.jaylawl.superseatboi.seat.SeatStructure;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -20,9 +21,15 @@ public class PlayerListener implements Listener {
     public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
         if (event.getHand() == EquipmentSlot.HAND) {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                Block clickedBlock = event.getClickedBlock();
-                if (clickedBlock != null) {
-                    SeatStructure seatStructure = SeatStructure.fromBlock(clickedBlock);
+                Block block = event.getClickedBlock();
+                if (block != null) {
+                    String worldName = block.getWorld().getName();
+                    for (String blackListedWorldName : SuperSeatBoi.getSeatManager().blacklistedWorldNames) {
+                        if (worldName.equals(blackListedWorldName)) {
+                            return;
+                        }
+                    }
+                    SeatStructure seatStructure = SeatStructure.fromBlock(block);
                     if (seatStructure != null) {
                         event.setCancelled(true);
                         seatStructure.interact(event.getPlayer());

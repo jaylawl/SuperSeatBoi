@@ -19,10 +19,11 @@ Settings:
     - REDSTONE_BLOCK
   # Whether to bother checking for a control block or not
   RequireControlBlock: true
-  AllowSeatingWhileFalling: true
   AllowWaterloggedSeats: false
-  AllowSeatingWhileSneaking: false
-  AllowCreativeModeSeating: true
+  AllowSeatingIfFalling: true
+  AllowSeatingIfSneaking: false
+  AllowSeatingIfFlying: false
+  AllowSeatingIfCreativeMode: true
   BlacklistedWorlds: []
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

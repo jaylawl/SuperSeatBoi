@@ -3,7 +3,6 @@ package de.jaylawl.superseatboi.seat;
 import de.jaylawl.superseatboi.SuperSeatBoi;
 import de.jaylawl.superseatboi.event.PlayerInteractWithSeatStructureEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
@@ -30,7 +29,7 @@ public class SeatStructure {
         {
             if (seatManager.isSeatBlockMaterial(seatBlock.getType())) {
                 Block controlBlock = seatBlock.getRelative(BlockFace.DOWN);
-                if (seatManager.isControlBlockMaterial(controlBlock.getType())) {
+                if (!seatManager.requireControlBlock || seatManager.isControlBlockMaterial(controlBlock.getType())) {
 
                     BlockData blockData = seatBlock.getBlockData();
 
@@ -39,12 +38,14 @@ public class SeatStructure {
                             break check;
                         }
                     }
-                    if (blockData instanceof Waterlogged waterlogged) {
-                        if (waterlogged.isWaterlogged()) {
-                            break check;
+                    if (!seatManager.allowWaterloggedSeats) {
+                        if (blockData instanceof Waterlogged waterlogged) {
+                            if (waterlogged.isWaterlogged()) {
+                                break check;
+                            }
                         }
-                    }
 
+                    }
                     return new SeatStructure(seatBlock, controlBlock);
                 }
             }
@@ -64,7 +65,21 @@ public class SeatStructure {
 
     public void interact(@NotNull Player player) {
         PlayerInteractWithSeatStructureEvent playerInteractWithSeatStructureEvent = new PlayerInteractWithSeatStructureEvent(this, player);
-        boolean cancelEvent = player.isSneaking() || player.getGameMode() == GameMode.SPECTATOR || player.getVelocity().getY() < -.08;
+        boolean cancelEvent = false;
+        SeatManager seatManager = SuperSeatBoi.getSeatManager();
+        switch (player.getGameMode()) {
+            case CREATIVE -> cancelEvent = !seatManager.allowSeatingIfCreativeMode;
+            case SPECTATOR -> cancelEvent = true;
+        }
+        if (!seatManager.allowSeatingIfSneaking && player.isSneaking()) {
+            cancelEvent = true;
+        }
+        if (!seatManager.allowSeatingIfFalling && player.getVelocity().getY() < -.08) {
+            cancelEvent = true;
+        }
+        if (!seatManager.allowSeatingIfFlying && player.isFlying()) {
+            cancelEvent = true;
+        }
         playerInteractWithSeatStructureEvent.setCancelled(cancelEvent);
         Bukkit.getPluginManager().callEvent(playerInteractWithSeatStructureEvent);
 

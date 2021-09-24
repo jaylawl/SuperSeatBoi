@@ -34,6 +34,13 @@ public class SeatManager {
     private EnumSet<Material> controlBlockMaterials = EnumSet.noneOf(Material.class);
 
     // TODO: 24.09.2021
+    public final boolean requireControlBlock = true;
+    public final boolean allowWaterloggedSeats = false;
+    public final boolean allowSeatingIfFalling = false;
+    public final boolean allowSeatingIfSneaking = false;
+    public final boolean allowSeatingIfFlying = false;
+    public final boolean allowSeatingIfCreativeMode = true;
+    public final String[] blacklistedWorldNames = new String[]{};
 
     public SeatManager() {
     }
