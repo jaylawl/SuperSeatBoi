@@ -121,7 +121,7 @@ public class SeatManager {
         return Optional.ofNullable(this.seatEntities.get(uniqueId));
     }
 
-    public @Nullable SeatEntity getSeatEntityInBlock(@NotNull Block block) {
+    public Optional<SeatEntity> getSeatEntityInBlock(@NotNull Block block) {
         World blockWorld = block.getWorld();
         Vector blockMinVector = block.getLocation().toBlockLocation().toVector();
         BoundingBox voxelBoundingBox = BoundingBox.of(blockMinVector, blockMinVector.clone().add(new Vector(1, 1, 1)));
@@ -130,11 +130,11 @@ public class SeatManager {
             Location entityLocation = entity.getLocation();
             if (blockWorld.equals(entityLocation.getWorld())) {
                 if (voxelBoundingBox.contains(entityLocation.toVector())) {
-                    return seatEntity;
+                    return Optional.of(seatEntity);
                 }
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     //

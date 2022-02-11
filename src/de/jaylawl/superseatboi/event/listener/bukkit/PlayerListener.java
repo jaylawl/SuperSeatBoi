@@ -38,7 +38,7 @@ public class PlayerListener implements Listener {
                     SeatStructure seatStructure = SeatStructure.fromBlock(block);
                     if (seatStructure != null) {
                         event.setCancelled(true);
-                        seatStructure.interact(event.getPlayer());
+                        seatStructure.onPlayerInteract(event.getPlayer());
                     }
                 }
             }

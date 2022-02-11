@@ -1,6 +1,5 @@
 package de.jaylawl.superseatboi.event.listener.bukkit;
 
-import de.jaylawl.superseatboi.seat.SeatEntity;
 import de.jaylawl.superseatboi.seat.SeatManager;
 import de.jaylawl.superseatboi.seat.SeatStructure;
 import org.bukkit.block.Block;
@@ -26,12 +25,11 @@ public class BlockListener implements Listener {
         Block block = event.getBlock();
         SeatStructure seatStructure = SeatStructure.fromBlock(block);
         if (seatStructure != null) {
-            SeatEntity existentSeatEntity = this.seatManager.getSeatEntityInBlock(block);
-            if (existentSeatEntity != null) {
-                Entity entity = existentSeatEntity.getEntity();
+            this.seatManager.getSeatEntityInBlock(block).ifPresent(seatEntity -> {
+                Entity entity = seatEntity.getEntity();
                 entity.eject();
                 entity.remove();
-            }
+            });
         }
     }
 

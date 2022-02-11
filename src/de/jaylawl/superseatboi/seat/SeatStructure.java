@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 public class SeatStructure {
 
     private final Block seatBlock;
@@ -24,33 +26,24 @@ public class SeatStructure {
     }
 
     public static @Nullable SeatStructure fromBlock(@NotNull Block seatBlock) {
-        SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
-        check:
-        {
-            if (seatManager.isSeatBlockMaterial(seatBlock.getType())) {
-                Block controlBlock = seatBlock.getRelative(BlockFace.DOWN);
-                if (!seatManager.requireControlBlock || seatManager.isControlBlockMaterial(controlBlock.getType())) {
+        final SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
 
-                    BlockData blockData = seatBlock.getBlockData();
+        if (!seatManager.isSeatBlockMaterial(seatBlock.getType())) {
+            return null;
+        }
 
-                    if (blockData instanceof Bisected bisected) {
-                        if (bisected.getHalf() == Bisected.Half.TOP) {
-                            break check;
-                        }
-                    }
-                    if (!seatManager.allowWaterloggedSeats) {
-                        if (blockData instanceof Waterlogged waterlogged) {
-                            if (waterlogged.isWaterlogged()) {
-                                break check;
-                            }
-                        }
-
-                    }
-                    return new SeatStructure(seatBlock, controlBlock);
-                }
+        Block controlBlock = seatBlock.getRelative(BlockFace.DOWN);
+        if (seatManager.requireControlBlock) {
+            if (!seatManager.isControlBlockMaterial(controlBlock.getType())) {
+                return null;
             }
         }
-        return null;
+
+        if (seatBlock.getBlockData() instanceof Bisected bisected && bisected.getHalf() == Bisected.Half.TOP) {
+            return null;
+        }
+
+        return new SeatStructure(seatBlock, controlBlock);
     }
 
     //
@@ -63,21 +56,21 @@ public class SeatStructure {
         return this.controlBlock;
     }
 
-    public void interact(@NotNull Player player) {
+    public void onPlayerInteract(@NotNull Player player) {
         PlayerInteractWithSeatStructureEvent playerInteractWithSeatStructureEvent = new PlayerInteractWithSeatStructureEvent(this, player);
         boolean cancelEvent = false;
-        SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
+        final SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
         switch (player.getGameMode()) {
             case CREATIVE -> cancelEvent = !seatManager.allowSeatingIfCreativeMode;
             case SPECTATOR -> cancelEvent = true;
         }
-        if (!seatManager.allowSeatingIfSneaking && player.isSneaking()) {
+        if (!seatManager.allowWaterloggedSeats && this.seatBlock instanceof Waterlogged waterlogged && waterlogged.isWaterlogged()) {
             cancelEvent = true;
-        }
-        if (!seatManager.allowSeatingIfFalling && player.getVelocity().getY() < -.08) {
+        } else if (!seatManager.allowSeatingIfSneaking && player.isSneaking()) {
             cancelEvent = true;
-        }
-        if (!seatManager.allowSeatingIfFlying && player.isFlying()) {
+        } else if (!seatManager.allowSeatingIfFalling && player.getVelocity().getY() < -.08) {
+            cancelEvent = true;
+        } else if (!seatManager.allowSeatingIfFlying && player.isFlying()) {
             cancelEvent = true;
         }
         playerInteractWithSeatStructureEvent.setCancelled(cancelEvent);
@@ -92,21 +85,20 @@ public class SeatStructure {
         }
     }
 
-    public @Nullable SeatEntity getSeatEntity() {
+    public Optional<SeatEntity> getSeatEntity() {
         return SuperSeatBoi.getInstance().getSeatManager().getSeatEntityInBlock(this.seatBlock);
     }
 
     public @NotNull SeatEntity getOrSpawnSeatEntity() {
         SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
-        SeatEntity seatEntity = seatManager.getSeatEntityInBlock(this.seatBlock);
-        if (seatEntity == null) {
-            seatEntity = SuperSeatBoi.getInstance().getSeatManager().spawnSeatEntity(this);
-        }
+        final SeatEntity seatEntity;
+        Optional<SeatEntity> existentSeatEntity = seatManager.getSeatEntityInBlock(this.seatBlock);
+        seatEntity = existentSeatEntity.orElseGet(() -> seatManager.spawnSeatEntity(this));
         return seatEntity;
     }
 
     public boolean hasSeatEntity() {
-        return getSeatEntity() != null;
+        return getSeatEntity().isPresent();
     }
 
 }

@@ -25,39 +25,37 @@ public class EntityListener implements Listener {
     //
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onEntityRemoveFromWorld(@NotNull EntityRemoveFromWorldEvent event) {
+    public void onEntityRemoveFromWorld(final @NotNull EntityRemoveFromWorldEvent event) {
         this.seatManager.unregisterSeatEntity(event.getEntity().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onEntityMount(@NotNull EntityMountEvent event) {
+    public void onEntityMount(final @NotNull EntityMountEvent event) {
         Entity mountedEntity = event.getMount();
         this.seatManager.getSeatEntity(mountedEntity.getUniqueId()).ifPresent(seatEntity -> {
-                    SeatEntityMountEvent seatEntityMountEvent = new SeatEntityMountEvent(seatEntity);
-                    Bukkit.getPluginManager().callEvent(seatEntityMountEvent);
-                    if (seatEntityMountEvent.isCancelled()) {
-                        event.setCancelled(true);
-                    }
-                }
-        );
+            SeatEntityMountEvent seatEntityMountEvent = new SeatEntityMountEvent(seatEntity);
+            Bukkit.getPluginManager().callEvent(seatEntityMountEvent);
+            if (seatEntityMountEvent.isCancelled()) {
+                event.setCancelled(true);
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onEntityDismount(@NotNull EntityDismountEvent event) {
+    public void onEntityDismount(final @NotNull EntityDismountEvent event) {
         Entity dismountedEntity = event.getDismounted();
         this.seatManager.getSeatEntity(dismountedEntity.getUniqueId()).ifPresent(seatEntity -> {
-                    SeatEntityDismountEvent seatEntityDismountEvent = new SeatEntityDismountEvent(seatEntity);
-                    Bukkit.getPluginManager().callEvent(seatEntityDismountEvent);
-                    if (seatEntityDismountEvent.isCancelled()) {
-                        event.setCancelled(true);
-                    } else {
-                        Entity passenger = dismountedEntity.getPassengers().get(0);
-                        dismountedEntity.remove();
-                        Location passengerLocation = passenger.getLocation();
-                        passenger.teleport(passengerLocation.add(0, 1, 0));
-                    }
-                }
-        );
+            SeatEntityDismountEvent seatEntityDismountEvent = new SeatEntityDismountEvent(seatEntity);
+            Bukkit.getPluginManager().callEvent(seatEntityDismountEvent);
+            if (seatEntityDismountEvent.isCancelled()) {
+                event.setCancelled(true);
+            } else {
+                Entity passenger = dismountedEntity.getPassengers().get(0);
+                dismountedEntity.remove();
+                Location passengerLocation = passenger.getLocation();
+                passenger.teleport(passengerLocation.add(0, 1, 0));
+            }
+        });
     }
 
 }
