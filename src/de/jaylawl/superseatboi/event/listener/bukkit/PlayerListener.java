@@ -1,6 +1,5 @@
 package de.jaylawl.superseatboi.event.listener.bukkit;
 
-import de.jaylawl.superseatboi.seat.SeatEntity;
 import de.jaylawl.superseatboi.seat.SeatManager;
 import de.jaylawl.superseatboi.seat.SeatStructure;
 import org.bukkit.block.Block;
@@ -50,8 +49,7 @@ public class PlayerListener implements Listener {
     public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
         Entity vehicle = event.getPlayer().getVehicle();
         if (vehicle != null) {
-            SeatEntity seatEntity = this.seatManager.getSeatEntity(vehicle.getUniqueId());
-            if (seatEntity != null) {
+            if (this.seatManager.getSeatEntity(vehicle.getUniqueId()).isPresent()) {
                 vehicle.eject();
             }
         }

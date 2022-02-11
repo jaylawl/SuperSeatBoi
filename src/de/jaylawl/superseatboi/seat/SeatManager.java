@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -116,8 +117,8 @@ public class SeatManager {
         return this.seatEntities.values().toArray(new SeatEntity[0]);
     }
 
-    public @Nullable SeatEntity getSeatEntity(@NotNull UUID uniqueId) {
-        return this.seatEntities.get(uniqueId);
+    public Optional<SeatEntity> getSeatEntity(@NotNull UUID uniqueId) {
+        return Optional.ofNullable(this.seatEntities.get(uniqueId));
     }
 
     public @Nullable SeatEntity getSeatEntityInBlock(@NotNull Block block) {
