@@ -5,6 +5,7 @@ import de.jaylawl.superseatboi.event.listener.bukkit.BlockListener;
 import de.jaylawl.superseatboi.event.listener.bukkit.EntityListener;
 import de.jaylawl.superseatboi.event.listener.bukkit.PlayerListener;
 import de.jaylawl.superseatboi.seat.SeatManager;
+import de.jaylawl.superseatboi.util.ConfigurableSettings;
 import de.jaylawl.superseatboi.util.ReloadScript;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -23,16 +24,15 @@ public class SuperSeatBoi extends JavaPlugin {
 
     private static SuperSeatBoi INSTANCE;
 
-    private SeatManager seatManager;
+    private final SeatManager seatManager = new SeatManager();
 
+    private final ConfigurableSettings configurableSettings = new ConfigurableSettings();
     private ReloadScript latestReloadScript = null;
 
     @Override
     public void onEnable() {
 
         INSTANCE = this;
-
-        this.seatManager = new SeatManager();
 
         final Logger logger = getLogger();
 
@@ -104,7 +104,11 @@ public class SuperSeatBoi extends JavaPlugin {
     }
 
     public SeatManager getSeatManager() {
-        return INSTANCE.seatManager;
+        return this.seatManager;
+    }
+
+    public ConfigurableSettings getConfigurableSettings() {
+        return this.configurableSettings;
     }
 
 }

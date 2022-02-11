@@ -20,7 +20,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.EnumSet;
@@ -32,17 +31,9 @@ public class SeatManager {
 
     private final ConcurrentHashMap<UUID, SeatEntity> seatEntities = new ConcurrentHashMap<>();
 
+    // TODO: 11.02.2022 move these members to ConfigurableSettings
     private EnumSet<Material> seatBlockMaterials = EnumSet.noneOf(Material.class);
     private EnumSet<Material> controlBlockMaterials = EnumSet.noneOf(Material.class);
-
-    // TODO: 24.09.2021
-    public final boolean requireControlBlock = true;
-    public final boolean allowWaterloggedSeats = true;
-    public final boolean allowSeatingIfFalling = false;
-    public final boolean allowSeatingIfSneaking = false;
-    public final boolean allowSeatingIfFlying = false;
-    public final boolean allowSeatingIfCreativeMode = true;
-    public final String[] blacklistedWorldNames = new String[]{};
 
     public SeatManager() {
     }

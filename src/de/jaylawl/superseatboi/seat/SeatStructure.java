@@ -2,11 +2,12 @@ package de.jaylawl.superseatboi.seat;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
 import de.jaylawl.superseatboi.event.PlayerInteractWithSeatStructureEvent;
+import de.jaylawl.superseatboi.util.ConfigurableSettings;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -33,7 +34,7 @@ public class SeatStructure {
         }
 
         Block controlBlock = seatBlock.getRelative(BlockFace.DOWN);
-        if (seatManager.requireControlBlock) {
+        if (SuperSeatBoi.getInstance().getConfigurableSettings().requireControlBlock) {
             if (!seatManager.isControlBlockMaterial(controlBlock.getType())) {
                 return null;
             }
@@ -57,20 +58,37 @@ public class SeatStructure {
     }
 
     public void onPlayerInteract(@NotNull Player player) {
+        final ConfigurableSettings configurableSettings = SuperSeatBoi.getInstance().getConfigurableSettings();
+
         PlayerInteractWithSeatStructureEvent playerInteractWithSeatStructureEvent = new PlayerInteractWithSeatStructureEvent(this, player);
         boolean cancelEvent = false;
-        final SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
-        switch (player.getGameMode()) {
-            case CREATIVE -> cancelEvent = !seatManager.allowSeatingIfCreativeMode;
-            case SPECTATOR -> cancelEvent = true;
+
+        final String worldName = player.getWorld().getName();
+        switch (configurableSettings.worldFilterMode) {
+            case BLACKLIST -> {
+                if (configurableSettings.blacklistedWorlds.contains(worldName)) {
+                    cancelEvent = true;
+                }
+            }
+            case WHITELIST -> {
+                if (!configurableSettings.whitelistedWorlds.contains(worldName)){
+                    cancelEvent = true;
+                }
+            }
         }
-        if (!seatManager.allowWaterloggedSeats && this.seatBlock instanceof Waterlogged waterlogged && waterlogged.isWaterlogged()) {
+
+        final GameMode gameMode = player.getGameMode();
+        if (!configurableSettings.allowSeatingIfCreativeMode && gameMode == GameMode.CREATIVE) {
             cancelEvent = true;
-        } else if (!seatManager.allowSeatingIfSneaking && player.isSneaking()) {
+        } else if (gameMode == GameMode.SPECTATOR) {
             cancelEvent = true;
-        } else if (!seatManager.allowSeatingIfFalling && player.getVelocity().getY() < -.08) {
+        } else if (!configurableSettings.allowWaterloggedSeats && this.seatBlock.getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged()) {
             cancelEvent = true;
-        } else if (!seatManager.allowSeatingIfFlying && player.isFlying()) {
+        } else if (!configurableSettings.allowSeatingIfSneaking && player.isSneaking()) {
+            cancelEvent = true;
+        } else if (!configurableSettings.allowSeatingIfFalling && player.getVelocity().getY() < -.08) {
+            cancelEvent = true;
+        } else if (!configurableSettings.allowSeatingIfFlying && player.isFlying()) {
             cancelEvent = true;
         }
         playerInteractWithSeatStructureEvent.setCancelled(cancelEvent);

@@ -29,12 +29,6 @@ public class PlayerListener implements Listener {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 Block block = event.getClickedBlock();
                 if (block != null) {
-                    String worldName = block.getWorld().getName();
-                    for (String blackListedWorldName : this.seatManager.blacklistedWorldNames) {
-                        if (worldName.equals(blackListedWorldName)) {
-                            return;
-                        }
-                    }
                     SeatStructure seatStructure = SeatStructure.fromBlock(block);
                     if (seatStructure != null) {
                         event.setCancelled(true);

@@ -19,11 +19,15 @@ public class ReloadScript extends IReloadScript {
 
     @Override
     public void finalSyncTasks() {
+        final SuperSeatBoi superSeatBoi = (SuperSeatBoi) this.pluginInstance;
+
+        ConfigurableSettings configurableSettings = superSeatBoi.getConfigurableSettings();
+        configurableSettings.applyDefaultValues();
     }
 
     @Override
     public void finish() {
-        SuperSeatBoi superSeatBoi = (SuperSeatBoi) this.pluginInstance;
+        final SuperSeatBoi superSeatBoi = (SuperSeatBoi) this.pluginInstance;
 
         this.logger.info("Reload completed within " + this.elapsedSeconds + " s. and with " + this.totalWarnings + " warning(s)");
 
