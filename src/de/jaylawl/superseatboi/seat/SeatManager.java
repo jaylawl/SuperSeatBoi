@@ -30,12 +30,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SeatManager {
 
     private final ConcurrentHashMap<UUID, SeatEntity> seatEntities = new ConcurrentHashMap<>();
+
     private EnumSet<Material> seatBlockMaterials = EnumSet.noneOf(Material.class);
     private EnumSet<Material> controlBlockMaterials = EnumSet.noneOf(Material.class);
 
     // TODO: 24.09.2021
     public final boolean requireControlBlock = true;
-    public final boolean allowWaterloggedSeats = false;
+    public final boolean allowWaterloggedSeats = true;
     public final boolean allowSeatingIfFalling = false;
     public final boolean allowSeatingIfSneaking = false;
     public final boolean allowSeatingIfFlying = false;

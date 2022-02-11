@@ -1,7 +1,7 @@
 package de.jaylawl.superseatboi.event.listener.bukkit;
 
-import de.jaylawl.superseatboi.SuperSeatBoi;
 import de.jaylawl.superseatboi.seat.SeatEntity;
+import de.jaylawl.superseatboi.seat.SeatManager;
 import de.jaylawl.superseatboi.seat.SeatStructure;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -13,12 +13,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class BlockListener implements Listener {
 
+    private final SeatManager seatManager;
+
+    public BlockListener(@NotNull SeatManager seatManager) {
+        this.seatManager = seatManager;
+    }
+
+    //
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(@NotNull BlockBreakEvent event) {
         Block block = event.getBlock();
         SeatStructure seatStructure = SeatStructure.fromBlock(block);
         if (seatStructure != null) {
-            SeatEntity existentSeatEntity = SuperSeatBoi.getSeatManager().getSeatEntityInBlock(block);
+            SeatEntity existentSeatEntity = this.seatManager.getSeatEntityInBlock(block);
             if (existentSeatEntity != null) {
                 Entity entity = existentSeatEntity.getEntity();
                 entity.eject();

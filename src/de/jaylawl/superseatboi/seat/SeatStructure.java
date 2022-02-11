@@ -24,7 +24,7 @@ public class SeatStructure {
     }
 
     public static @Nullable SeatStructure fromBlock(@NotNull Block seatBlock) {
-        SeatManager seatManager = SuperSeatBoi.getSeatManager();
+        SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
         check:
         {
             if (seatManager.isSeatBlockMaterial(seatBlock.getType())) {
@@ -66,7 +66,7 @@ public class SeatStructure {
     public void interact(@NotNull Player player) {
         PlayerInteractWithSeatStructureEvent playerInteractWithSeatStructureEvent = new PlayerInteractWithSeatStructureEvent(this, player);
         boolean cancelEvent = false;
-        SeatManager seatManager = SuperSeatBoi.getSeatManager();
+        SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
         switch (player.getGameMode()) {
             case CREATIVE -> cancelEvent = !seatManager.allowSeatingIfCreativeMode;
             case SPECTATOR -> cancelEvent = true;
@@ -93,14 +93,14 @@ public class SeatStructure {
     }
 
     public @Nullable SeatEntity getSeatEntity() {
-        return SuperSeatBoi.getSeatManager().getSeatEntityInBlock(this.seatBlock);
+        return SuperSeatBoi.getInstance().getSeatManager().getSeatEntityInBlock(this.seatBlock);
     }
 
     public @NotNull SeatEntity getOrSpawnSeatEntity() {
-        SeatManager seatManager = SuperSeatBoi.getSeatManager();
+        SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
         SeatEntity seatEntity = seatManager.getSeatEntityInBlock(this.seatBlock);
         if (seatEntity == null) {
-            seatEntity = SuperSeatBoi.getSeatManager().spawnSeatEntity(this);
+            seatEntity = SuperSeatBoi.getInstance().getSeatManager().spawnSeatEntity(this);
         }
         return seatEntity;
     }
