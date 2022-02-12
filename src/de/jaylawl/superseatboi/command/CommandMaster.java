@@ -1,8 +1,10 @@
 package de.jaylawl.superseatboi.command;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
+import de.jaylawl.superseatboi.util.ConfigurableSettings;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,9 +30,21 @@ public class CommandMaster implements TabCompleter, CommandExecutor {
 
         switch (argumentNumber) {
             case 1 -> {
-                completions.add(
-                        "reload"
-                );
+                completions.add("print");
+                completions.add("reload");
+            }
+            case 2 -> {
+                if (arguments[0].equalsIgnoreCase("print")) {
+                    completions.add("materials");
+                }
+            }
+            case 3 -> {
+                if (arguments[0].equalsIgnoreCase("print")) {
+                    if (arguments[1].equalsIgnoreCase("materials")) {
+                        completions.add("controlblocks");
+                        completions.add("seatblocks");
+                    }
+                }
             }
         }
 
@@ -41,6 +55,44 @@ public class CommandMaster implements TabCompleter, CommandExecutor {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] arguments) {
 
         switch (arguments.length > 0 ? arguments[0].toLowerCase() : "") {
+
+            case "print" -> {
+
+                if (arguments.length < 2) {
+                    commandSender.sendMessage(ChatColor.RED + "Unknown/missing argument(s)");
+
+                } else {
+                    String whatToPrint = arguments[1].toLowerCase();
+                    switch (whatToPrint) {
+
+                        case "materials" -> {
+                            if (arguments.length < 3) {
+                                commandSender.sendMessage(ChatColor.RED + "Unknown/missing argument(s)");
+
+                            } else {
+                                String materialsType = arguments[2].toLowerCase();
+                                ConfigurableSettings configurableSettings = SuperSeatBoi.getInstance().getConfigurableSettings();
+                                switch (materialsType) {
+
+                                    case "controlblocks" -> {
+                                        commandSender.sendMessage(configurableSettings.controlBlockMaterials.size() + " control block material(s) loaded: " + configurableSettings.controlBlockMaterials);
+                                    }
+
+                                    case "seatblocks" -> {
+                                        commandSender.sendMessage(configurableSettings.seatBlockMaterials.size() + " seat block material(s) loaded: " + configurableSettings.seatBlockMaterials);
+                                    }
+
+                                    default -> {
+                                        commandSender.sendMessage(ChatColor.RED + "Unknown/missing argument(s)");
+                                    }
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
 
             case "reload" -> {
                 if (!SuperSeatBoi.getInstance().reload(commandSender)) {
