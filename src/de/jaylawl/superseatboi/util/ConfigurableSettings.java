@@ -10,7 +10,7 @@ public final class ConfigurableSettings {
     public static final int DEFAULT_PLAYER_INTERACTION_COOLDOWN = 5;
     public static final WorldFilterMode DEFAULT_WORLD_FILTER_MODE = WorldFilterMode.BLACKLIST;
     public static final boolean DEFAULT_REQUIRE_CONTROL_BLOCK = true;
-    public static final String[] DEFAULT_SEAT_BLOCK_MATERIAL_NAMES = new String[]{"*STAIR", "*SLAB"};
+    public static final String[] DEFAULT_SEAT_BLOCK_MATERIAL_NAMES = new String[]{"tag:STAIRS", "tag:SLABS"};
     public static final String[] DEFAULT_CONTROL_BLOCK_MATERIAL_NAMES = new String[]{"REDSTONE_BLOCK"};
     public static final boolean DEFAULT_ALLOW_WATERLOGGED_SEATS = false;
     public static final boolean DEFAULT_ALLOW_SEATING_WHILE_FALLING = false;
