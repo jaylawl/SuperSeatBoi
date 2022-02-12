@@ -77,6 +77,10 @@ public class SeatStructure {
             }
         }
 
+        if (player.getVehicle() != null) {
+            cancelEvent = true;
+        }
+
         final GameMode gameMode = player.getGameMode();
         if (!configurableSettings.allowSeatingIfCreativeMode && gameMode == GameMode.CREATIVE) {
             cancelEvent = true;
@@ -109,10 +113,7 @@ public class SeatStructure {
 
     public @NotNull SeatEntity getOrSpawnSeatEntity() {
         SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
-        final SeatEntity seatEntity;
-        Optional<SeatEntity> existentSeatEntity = seatManager.getSeatEntityInBlock(this.seatBlock);
-        seatEntity = existentSeatEntity.orElseGet(() -> seatManager.spawnSeatEntity(this));
-        return seatEntity;
+        return seatManager.getSeatEntityInBlock(this.seatBlock).orElseGet(() -> seatManager.spawnSeatEntity(this));
     }
 
     public boolean hasSeatEntity() {
