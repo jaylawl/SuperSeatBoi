@@ -1,21 +1,17 @@
-package de.jaylawl.superseatboi.event;
+package de.jaylawl.superseatboi.event.event;
 
-import de.jaylawl.superseatboi.seat.SeatStructure;
-import org.bukkit.entity.Player;
+import de.jaylawl.superseatboi.seat.SeatEntity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerInteractWithSeatStructureEvent extends SeatStructureEvent implements Cancellable {
+public class SeatEntityMountEvent extends SeatEntityEvent implements Cancellable {
 
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private boolean cancelled = false;
 
-    private final Player player;
-
-    public PlayerInteractWithSeatStructureEvent(@NotNull SeatStructure seatStructure, @NotNull Player player) {
-        super(seatStructure);
-        this.player = player;
+    public SeatEntityMountEvent(@NotNull SeatEntity seatEntity) {
+        super(seatEntity);
     }
 
     //
@@ -37,12 +33,6 @@ public class PlayerInteractWithSeatStructureEvent extends SeatStructureEvent imp
     @Override
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
-    }
-
-    //
-
-    public @NotNull Player getPlayer() {
-        return this.player;
     }
 
 }

@@ -1,4 +1,4 @@
-package de.jaylawl.superseatboi.event;
+package de.jaylawl.superseatboi.event.event;
 
 import de.jaylawl.superseatboi.seat.SeatEntity;
 import org.bukkit.event.Cancellable;
