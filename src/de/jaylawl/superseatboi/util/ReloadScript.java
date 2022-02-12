@@ -4,6 +4,8 @@ import de.jaylawl.superseatboi.SuperSeatBoi;
 import de.jaylawl.superseatboi.event.event.SuperSeatBoiPostReloadEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -160,35 +162,43 @@ public class ReloadScript extends IReloadScript {
 
             // Seat and control block materials:
             {
-                // TODO: 12.02.2022 use block tags
-                List<String> seatBlockMaterialNames = yaml.getStringList("SeatBlockMaterials");
-                List<String> controlBlockMaterialNames = yaml.getStringList("ControlBlockMaterials");
                 Collection<Material> seatBlockMaterials = new ArrayList<>();
                 Collection<Material> controlBlockMaterials = new ArrayList<>();
-                for (Material material : Material.values()) {
-                    String materialName = material.toString();
 
-                    for (String seatBlockMaterialName : seatBlockMaterialNames) {
-                        if (seatBlockMaterialName.contains("*")) {
-                            seatBlockMaterialName = seatBlockMaterialName.replace("*", "");
-                            if (materialName.contains(seatBlockMaterialName)) {
-                                seatBlockMaterials.add(material);
+                for (int i = 0; i < 2; i++) {
+
+                    Collection<Material> list;
+                    String yamlNode;
+                    if (i == 0) {
+                        list = seatBlockMaterials;
+                        yamlNode = "SeatBlockMaterials";
+                    } else {
+                        list = controlBlockMaterials;
+                        yamlNode = "ControlBlockMaterials";
+                    }
+
+                    for (String inputString : yaml.getStringList(yamlNode)) {
+                        if (inputString.toLowerCase().contains("tag:")) {
+                            String tagName = inputString.replace("tag:", "").toLowerCase();
+                            Tag<Material> tag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName), Material.class);
+                            if (tag == null) {
+                                this.logger.warning("\"" + inputString + "\" is not a valid material tag set");
+                            } else {
+                                list.addAll(tag.getValues());
                             }
-                        } else if (materialName.equals(seatBlockMaterialName)) {
-                            seatBlockMaterials.add(material);
+                        } else {
+                            String materialName = inputString.toUpperCase();
+                            Material material;
+                            try {
+                                material = Material.valueOf(materialName);
+                            } catch (IllegalArgumentException exception) {
+                                this.logger.warning("\"" + inputString + "\" is not a valid material");
+                                continue;
+                            }
+                            list.add(material);
                         }
                     }
 
-                    for (String controlBlockMaterialName : controlBlockMaterialNames) {
-                        if (controlBlockMaterialName.contains("*")) {
-                            controlBlockMaterialName = controlBlockMaterialName.replace("*", "");
-                            if (materialName.contains(controlBlockMaterialName)) {
-                                controlBlockMaterials.add(material);
-                            }
-                        } else if (materialName.equals(controlBlockMaterialName)) {
-                            controlBlockMaterials.add(material);
-                        }
-                    }
                 }
 
                 configurableSettings.seatBlockMaterials = seatBlockMaterials.isEmpty() ? EnumSet.noneOf(Material.class) : EnumSet.copyOf(seatBlockMaterials);
