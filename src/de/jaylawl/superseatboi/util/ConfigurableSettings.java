@@ -22,8 +22,8 @@ public final class ConfigurableSettings {
 
     public int playerInteractionCooldown;
     public WorldFilterMode worldFilterMode;
-    public LinkedList<String> blacklistedWorlds = new LinkedList<>();
-    public LinkedList<String> whitelistedWorlds = new LinkedList<>();
+    public LinkedList<String> blacklistedWorlds;
+    public LinkedList<String> whitelistedWorlds;
     public EnumSet<Material> seatBlockMaterials = EnumSet.noneOf(Material.class);
     public EnumSet<Material> controlBlockMaterials = EnumSet.noneOf(Material.class);
     public boolean requireControlBlock;
@@ -43,6 +43,11 @@ public final class ConfigurableSettings {
 
     public void applyDefaultValues() {
         this.playerInteractionCooldown = DEFAULT_PLAYER_INTERACTION_COOLDOWN;
+        this.worldFilterMode = DEFAULT_WORLD_FILTER_MODE;
+        this.blacklistedWorlds = new LinkedList<>();
+        this.whitelistedWorlds = new LinkedList<>();
+        this.seatBlockMaterials = EnumSet.noneOf(Material.class);
+        this.controlBlockMaterials = EnumSet.noneOf(Material.class);
         this.requireControlBlock = DEFAULT_REQUIRE_CONTROL_BLOCK;
         this.allowWaterloggedSeats = DEFAULT_ALLOW_WATERLOGGED_SEATS;
         this.allowSeatingWhileFalling = DEFAULT_ALLOW_SEATING_WHILE_FALLING;
@@ -50,7 +55,6 @@ public final class ConfigurableSettings {
         this.allowSeatingWhileFlying = DEFAULT_ALLOW_SEATING_WHILE_FLYING;
         this.allowSeatingWhileGliding = DEFAULT_ALLOW_SEATING_WHILE_GLIDING;
         this.allowSeatingInCreativeMode = DEFAULT_ALLOW_SEATING_IN_CREATIVE_MODE;
-        this.worldFilterMode = DEFAULT_WORLD_FILTER_MODE;
         this.allowSeatSwapping = DEFAULT_ALLOW_SEAT_SWAPPING;
     }
 

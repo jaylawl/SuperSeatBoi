@@ -34,7 +34,8 @@ public class ReloadScript extends IReloadScript {
 
         File configFile = FileUtil.getConfigFile();
         if (configFile == null) {
-            // TODO: 12.02.2022 error handling
+            this.logger.warning("Unable to find config file \"config.yml\"");
+            this.totalWarnings++;
             return;
         }
 
@@ -42,8 +43,9 @@ public class ReloadScript extends IReloadScript {
         try {
             yaml.load(configFile);
         } catch (IOException | InvalidConfigurationException exception) {
-            // TODO: 12.02.2022 error handling
+            this.logger.warning("Exception occurred while trying to read \"config.yml\" as yaml configuration:");
             exception.printStackTrace();
+            this.totalWarnings++;
             return;
         }
 
@@ -129,8 +131,9 @@ public class ReloadScript extends IReloadScript {
                 fileOutputStream.flush();
 
             } catch (IOException exception) {
-                // TODO: 12.02.2022 error handling
+                this.logger.warning("Exception occurred while trying to save to \"config.yml\":");
                 exception.printStackTrace();
+                this.totalWarnings++;
             }
         }
 
@@ -149,6 +152,7 @@ public class ReloadScript extends IReloadScript {
                 } catch (IllegalArgumentException exception) {
                     this.logger.warning("\"" + worldFilterModeString + "\" is not a valid WorldFilterMode.class constant");
                     this.logger.warning("Must be either of " + Arrays.toString(WorldFilterMode.values()));
+                    this.totalWarnings++;
                 }
             }
 
@@ -178,6 +182,7 @@ public class ReloadScript extends IReloadScript {
                             Tag<Material> tag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName), Material.class);
                             if (tag == null) {
                                 this.logger.warning("\"" + inputString + "\" is not a valid material tag set");
+                                this.totalWarnings++;
                             } else {
                                 list.addAll(tag.getValues());
                             }
@@ -188,6 +193,7 @@ public class ReloadScript extends IReloadScript {
                                 material = Material.valueOf(materialName);
                             } catch (IllegalArgumentException exception) {
                                 this.logger.warning("\"" + inputString + "\" is not a valid material");
+                                this.totalWarnings++;
                                 continue;
                             }
                             list.add(material);
@@ -209,19 +215,30 @@ public class ReloadScript extends IReloadScript {
             configurableSettings.allowSeatingInCreativeMode = yaml.getBoolean("AllowSeatingInCreativeMode");
             configurableSettings.allowSeatSwapping = yaml.getBoolean("AllowSeatSwapping");
 
-            // TODO: 12.02.2022 produce warnings for bad configurations
-        }
+            if (configurableSettings.requireControlBlock && configurableSettings.controlBlockMaterials.isEmpty()) {
+                this.logger.warning("RequireControlBlocks is set to true, but no control block materials have been found");
+                this.totalWarnings++;
+            }
+            if (configurableSettings.seatBlockMaterials.isEmpty()) {
+                this.logger.warning("No seat block materials have been found");
+                this.totalWarnings++;
+            }
 
+        }
     }
 
     @Override
     public void finalSyncTasks() {
-
     }
 
     @Override
     public void finish() {
+        final SuperSeatBoi superSeatBoi = (SuperSeatBoi) this.pluginInstance;
+        final ConfigurableSettings configurableSettings = superSeatBoi.getConfigurableSettings();
+
         this.logger.info("Reload completed within " + this.elapsedSeconds + " s. and with " + this.totalWarnings + " warning(s)");
+        this.logger.info("+ Loaded " + configurableSettings.controlBlockMaterials.size() + " control block material(s)");
+        this.logger.info("+ Loaded " + configurableSettings.seatBlockMaterials.size() + " seat block material(s)");
 
         notifySubscribers(getSubscriberNotification());
 
