@@ -27,13 +27,8 @@ public class ReloadScript extends IReloadScript {
 
     @Override
     public void asyncTasks() {
-    }
-
-    @Override
-    public void finalSyncTasks() {
         FileUtil.createDefaultDataFolder();
         FileUtil.createDefaultConfigFile();
-
 
         final SuperSeatBoi superSeatBoi = (SuperSeatBoi) this.pluginInstance;
 
@@ -216,6 +211,11 @@ public class ReloadScript extends IReloadScript {
 
             // TODO: 12.02.2022 produce warnings for bad configurations
         }
+
+    }
+
+    @Override
+    public void finalSyncTasks() {
 
     }
 
