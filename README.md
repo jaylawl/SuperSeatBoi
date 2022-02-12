@@ -1,2 +1,0 @@
-# SuperSeatBoi
-seats
