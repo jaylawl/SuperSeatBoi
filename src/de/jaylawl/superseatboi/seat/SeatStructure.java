@@ -1,7 +1,7 @@
 package de.jaylawl.superseatboi.seat;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
-import de.jaylawl.superseatboi.event.PlayerInteractWithSeatStructureEvent;
+import de.jaylawl.superseatboi.event.event.PlayerInteractWithSeatStructureEvent;
 import de.jaylawl.superseatboi.util.ConfigurableSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -27,15 +27,29 @@ public class SeatStructure {
     }
 
     public static @Nullable SeatStructure fromBlock(@NotNull Block seatBlock) {
-        final SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
+        final ConfigurableSettings configurableSettings = SuperSeatBoi.getInstance().getConfigurableSettings();
 
-        if (!seatManager.isSeatBlockMaterial(seatBlock.getType())) {
+        final String worldName = seatBlock.getWorld().getName();
+        switch (configurableSettings.worldFilterMode) {
+            case BLACKLIST -> {
+                if (configurableSettings.blacklistedWorlds.contains(worldName)) {
+                    return null;
+                }
+            }
+            case WHITELIST -> {
+                if (!configurableSettings.whitelistedWorlds.contains(worldName)) {
+                    return null;
+                }
+            }
+        }
+
+        if (!configurableSettings.seatBlockMaterials.contains(seatBlock.getType())) {
             return null;
         }
 
         Block controlBlock = seatBlock.getRelative(BlockFace.DOWN);
         if (SuperSeatBoi.getInstance().getConfigurableSettings().requireControlBlock) {
-            if (!seatManager.isControlBlockMaterial(controlBlock.getType())) {
+            if (!configurableSettings.controlBlockMaterials.contains(controlBlock.getType())) {
                 return null;
             }
         }
@@ -57,56 +71,6 @@ public class SeatStructure {
         return this.controlBlock;
     }
 
-    public void onPlayerInteract(@NotNull Player player) {
-        final ConfigurableSettings configurableSettings = SuperSeatBoi.getInstance().getConfigurableSettings();
-
-        PlayerInteractWithSeatStructureEvent playerInteractWithSeatStructureEvent = new PlayerInteractWithSeatStructureEvent(this, player);
-        boolean cancelEvent = false;
-
-        final String worldName = player.getWorld().getName();
-        switch (configurableSettings.worldFilterMode) {
-            case BLACKLIST -> {
-                if (configurableSettings.blacklistedWorlds.contains(worldName)) {
-                    cancelEvent = true;
-                }
-            }
-            case WHITELIST -> {
-                if (!configurableSettings.whitelistedWorlds.contains(worldName)){
-                    cancelEvent = true;
-                }
-            }
-        }
-
-        if (player.getVehicle() != null) {
-            cancelEvent = true;
-        }
-
-        final GameMode gameMode = player.getGameMode();
-        if (!configurableSettings.allowSeatingIfCreativeMode && gameMode == GameMode.CREATIVE) {
-            cancelEvent = true;
-        } else if (gameMode == GameMode.SPECTATOR) {
-            cancelEvent = true;
-        } else if (!configurableSettings.allowWaterloggedSeats && this.seatBlock.getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged()) {
-            cancelEvent = true;
-        } else if (!configurableSettings.allowSeatingIfSneaking && player.isSneaking()) {
-            cancelEvent = true;
-        } else if (!configurableSettings.allowSeatingIfFalling && player.getVelocity().getY() < -.08) {
-            cancelEvent = true;
-        } else if (!configurableSettings.allowSeatingIfFlying && player.isFlying()) {
-            cancelEvent = true;
-        }
-        playerInteractWithSeatStructureEvent.setCancelled(cancelEvent);
-        Bukkit.getPluginManager().callEvent(playerInteractWithSeatStructureEvent);
-
-        if (!playerInteractWithSeatStructureEvent.isCancelled()) {
-            SeatEntity seatEntity = getOrSpawnSeatEntity();
-            Entity entity = seatEntity.getEntity();
-            if (entity.getPassengers().isEmpty()) {
-                entity.addPassenger(player);
-            }
-        }
-    }
-
     public Optional<SeatEntity> getSeatEntity() {
         return SuperSeatBoi.getInstance().getSeatManager().getSeatEntityInBlock(this.seatBlock);
     }
@@ -118,6 +82,43 @@ public class SeatStructure {
 
     public boolean hasSeatEntity() {
         return getSeatEntity().isPresent();
+    }
+
+    public void onPlayerInteract(@NotNull Player player) {
+
+        final ConfigurableSettings configurableSettings = SuperSeatBoi.getInstance().getConfigurableSettings();
+
+        PlayerInteractWithSeatStructureEvent playerInteractWithSeatStructureEvent = new PlayerInteractWithSeatStructureEvent(this, player);
+
+        final GameMode gameMode = player.getGameMode();
+
+        if (!configurableSettings.allowSeatSwapping && player.getVehicle() != null) {
+            playerInteractWithSeatStructureEvent.setCancelled(true);
+        } else if (!configurableSettings.allowSeatingInCreativeMode && gameMode == GameMode.CREATIVE) {
+            playerInteractWithSeatStructureEvent.setCancelled(true);
+        } else if (gameMode == GameMode.SPECTATOR) {
+            playerInteractWithSeatStructureEvent.setCancelled(true);
+        } else if (!configurableSettings.allowWaterloggedSeats && this.seatBlock.getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged()) {
+            playerInteractWithSeatStructureEvent.setCancelled(true);
+        } else if (!configurableSettings.allowSeatingWhileSneaking && player.isSneaking()) {
+            playerInteractWithSeatStructureEvent.setCancelled(true);
+        } else if (!configurableSettings.allowSeatingWhileFalling && player.getVelocity().getY() < -.08) {
+            playerInteractWithSeatStructureEvent.setCancelled(true);
+        } else if (!configurableSettings.allowSeatingWhileFlying && player.isFlying()) {
+            playerInteractWithSeatStructureEvent.setCancelled(true);
+        } else if (!configurableSettings.allowSeatingWhileGliding && player.isGliding()) {
+            playerInteractWithSeatStructureEvent.setCancelled(true);
+        }
+        Bukkit.getPluginManager().callEvent(playerInteractWithSeatStructureEvent);
+
+        if (playerInteractWithSeatStructureEvent.isCancelled()) {
+            return;
+        }
+        SeatEntity seatEntity = getOrSpawnSeatEntity();
+        Entity entity = seatEntity.getEntity();
+        if (entity.getPassengers().isEmpty()) {
+            entity.addPassenger(player);
+        }
     }
 
 }

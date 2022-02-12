@@ -1,10 +1,9 @@
 package de.jaylawl.superseatboi.seat;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
-import de.jaylawl.superseatboi.event.SeatEntitySpawnEvent;
+import de.jaylawl.superseatboi.event.event.SeatEntitySpawnEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -21,8 +20,6 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,10 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SeatManager {
 
     private final ConcurrentHashMap<UUID, SeatEntity> seatEntities = new ConcurrentHashMap<>();
-
-    // TODO: 11.02.2022 move these members to ConfigurableSettings
-    private EnumSet<Material> seatBlockMaterials = EnumSet.noneOf(Material.class);
-    private EnumSet<Material> controlBlockMaterials = EnumSet.noneOf(Material.class);
 
     public SeatManager() {
     }
@@ -126,32 +119,6 @@ public class SeatManager {
             }
         }
         return Optional.empty();
-    }
-
-    //
-
-    public void setSeatBlockMaterials(@NotNull Collection<Material> materials) {
-        this.seatBlockMaterials = materials.isEmpty() ? EnumSet.noneOf(Material.class) : EnumSet.copyOf(materials);
-    }
-
-    public @NotNull EnumSet<Material> getSeatBlockMaterials() {
-        return this.seatBlockMaterials.clone();
-    }
-
-    public boolean isSeatBlockMaterial(@NotNull Material material) {
-        return this.seatBlockMaterials.contains(material);
-    }
-
-    public void setControlBlockMaterials(@NotNull Collection<Material> materials) {
-        this.controlBlockMaterials = materials.isEmpty() ? EnumSet.noneOf(Material.class) : EnumSet.copyOf(materials);
-    }
-
-    public @NotNull EnumSet<Material> getControlBlockMaterials() {
-        return this.controlBlockMaterials.clone();
-    }
-
-    public boolean isControlBlockMaterial(@NotNull Material material) {
-        return this.controlBlockMaterials.contains(material);
     }
 
 }

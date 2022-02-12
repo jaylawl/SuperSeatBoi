@@ -1,8 +1,8 @@
 package de.jaylawl.superseatboi.event.listener.bukkit;
 
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
-import de.jaylawl.superseatboi.event.SeatEntityDismountEvent;
-import de.jaylawl.superseatboi.event.SeatEntityMountEvent;
+import de.jaylawl.superseatboi.event.event.SeatEntityDismountEvent;
+import de.jaylawl.superseatboi.event.event.SeatEntityMountEvent;
 import de.jaylawl.superseatboi.seat.SeatManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

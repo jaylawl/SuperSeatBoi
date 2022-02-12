@@ -1,8 +1,10 @@
 package de.jaylawl.superseatboi;
 
 import de.jaylawl.superseatboi.command.CommandMaster;
+import de.jaylawl.superseatboi.event.event.SuperSeatBoiPreReloadEvent;
 import de.jaylawl.superseatboi.event.listener.bukkit.BlockListener;
 import de.jaylawl.superseatboi.event.listener.bukkit.EntityListener;
+import de.jaylawl.superseatboi.event.listener.debug.DebugListener;
 import de.jaylawl.superseatboi.event.listener.bukkit.PlayerListener;
 import de.jaylawl.superseatboi.seat.SeatManager;
 import de.jaylawl.superseatboi.util.ConfigurableSettings;
@@ -15,9 +17,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
 public class SuperSeatBoi extends JavaPlugin {
@@ -36,14 +35,6 @@ public class SuperSeatBoi extends JavaPlugin {
 
         final Logger logger = getLogger();
 
-        InputStream inputStream = getClass().getResourceAsStream("/de/jaylawl/superseatboi/resources/ascii_startup_art.txt");
-        if (inputStream != null) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            for (String line : bufferedReader.lines().toList()) {
-                logger.info(line);
-            }
-        }
-
         final PluginManager pluginManager = getServer().getPluginManager();
 
         PluginCommand masterCommand = getCommand("superseatboi");
@@ -61,6 +52,8 @@ public class SuperSeatBoi extends JavaPlugin {
         pluginManager.registerEvents(new BlockListener(this.seatManager), this);
         pluginManager.registerEvents(new EntityListener(this.seatManager), this);
         pluginManager.registerEvents(new PlayerListener(this.seatManager), this);
+        //
+        pluginManager.registerEvents(new DebugListener(), this);
 
         new BukkitRunnable() {
             @Override
@@ -71,6 +64,8 @@ public class SuperSeatBoi extends JavaPlugin {
                 }
             }
         }.runTaskLater(this, 1L);
+
+        System.out.println("Thank you for taking a seat!");
 
     }
 
@@ -93,6 +88,7 @@ public class SuperSeatBoi extends JavaPlugin {
         if (issuer instanceof Player player) {
             this.latestReloadScript.addSubscriber(player.getUniqueId());
         }
+        getServer().getPluginManager().callEvent(new SuperSeatBoiPreReloadEvent());
         this.latestReloadScript.run();
         return true;
     }
