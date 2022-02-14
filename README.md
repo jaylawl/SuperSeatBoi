@@ -19,6 +19,46 @@ https://www.spigotmc.org/resources/superseatboi.77321/
 
 ## Configuration file "config.yml"
 
+````
+# 
+# 
+#    ______                         ______                   ______        _
+#   / _____)                       / _____)              _  (____  \      (_)
+#  ( (____  _   _ ____  _____  ___( (____  _____ _____ _| |_ ____)  ) ___  _
+#   \____ \| | | |  _ \| ___ |/ ___)____ \| ___ (____ (_   _)  __  ( / _ \| |
+#   _____) ) |_| | |_| | ____| |   _____) ) ____/ ___ | | |_| |__)  ) |_| | |
+#  (______/|____/|  __/|_____)_|  (______/|_____)_____|  \__)______/ \___/|_|
+#                |_|
+# 
+# SuperSeatBoi 1.4.0
+# for Spigot API version 1.17
+# created by jaylawl
+# 
+# Github: https://github.com/jaylawl/SuperSeatBoi
+# SpigotMC: https://www.spigotmc.org/resources/superseatboi.77321/
+# 
+# Please refer to the Github page for both reporting issues and documentation of the plugin.
+# 
+
+PlayerInteractionCooldown: 5
+WorldFilterMode: BLACKLIST
+BlacklistedWorlds: []
+WhitelistedWorlds: []
+RequireControlBlock: true
+SeatBlockMaterials:
+- tag:STAIRS
+- tag:SLABS
+ControlBlockMaterials:
+- REDSTONE_BLOCK
+AllowWaterloggedSeats: false
+AllowSeatingWhileFalling: false
+AllowSeatingWhileSneaking: false
+AllowSeatingWhileFlying: false
+AllowSeatingWhileGliding: false
+AllowSeatingInCreativeMode: true
+AllowSeatSwapping: false
+````
+
 * ### PlayerInteractionCooldown
   > default: 5
   > <br>
