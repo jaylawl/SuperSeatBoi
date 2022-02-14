@@ -4,7 +4,6 @@ import de.jaylawl.superseatboi.command.CommandMaster;
 import de.jaylawl.superseatboi.event.event.SuperSeatBoiPreReloadEvent;
 import de.jaylawl.superseatboi.event.listener.bukkit.BlockListener;
 import de.jaylawl.superseatboi.event.listener.bukkit.EntityListener;
-import de.jaylawl.superseatboi.event.listener.debug.DebugListener;
 import de.jaylawl.superseatboi.event.listener.bukkit.PlayerListener;
 import de.jaylawl.superseatboi.seat.SeatManager;
 import de.jaylawl.superseatboi.util.ConfigurableSettings;
@@ -52,8 +51,6 @@ public class SuperSeatBoi extends JavaPlugin {
         pluginManager.registerEvents(new BlockListener(this.seatManager), this);
         pluginManager.registerEvents(new EntityListener(this.seatManager), this);
         pluginManager.registerEvents(new PlayerListener(this.seatManager), this);
-        //
-        pluginManager.registerEvents(new DebugListener(), this);
 
         new BukkitRunnable() {
             @Override
