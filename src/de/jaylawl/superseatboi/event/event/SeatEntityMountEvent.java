@@ -21,10 +21,6 @@ public class SeatEntityMountEvent extends SeatEntityEvent implements Cancellable
         return HANDLER_LIST;
     }
 
-    public static @NotNull HandlerList getHandlerList() {
-        return HANDLER_LIST;
-    }
-
     @Override
     public boolean isCancelled() {
         return this.cancelled;

@@ -25,10 +25,6 @@ public class PlayerInteractWithSeatStructureEvent extends SeatStructureEvent imp
         return HANDLER_LIST;
     }
 
-    public static @NotNull HandlerList getHandlerList() {
-        return HANDLER_LIST;
-    }
-
     @Override
     public boolean isCancelled() {
         return this.cancelled;

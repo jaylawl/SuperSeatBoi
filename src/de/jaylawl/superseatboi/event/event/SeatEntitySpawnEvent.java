@@ -19,8 +19,4 @@ public class SeatEntitySpawnEvent extends SeatEntityEvent {
         return HANDLER_LIST;
     }
 
-    public static @NotNull HandlerList getHandlerList() {
-        return HANDLER_LIST;
-    }
-
 }

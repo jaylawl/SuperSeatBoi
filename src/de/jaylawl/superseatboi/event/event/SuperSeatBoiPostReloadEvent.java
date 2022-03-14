@@ -17,8 +17,4 @@ public class SuperSeatBoiPostReloadEvent extends SuperSeatBoiEvent {
         return HANDLER_LIST;
     }
 
-    public static @NotNull HandlerList getHandlerList() {
-        return HANDLER_LIST;
-    }
-
 }
