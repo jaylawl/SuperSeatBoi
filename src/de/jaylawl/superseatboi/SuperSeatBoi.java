@@ -62,7 +62,7 @@ public class SuperSeatBoi extends JavaPlugin {
             }
         }.runTaskLater(this, 1L);
 
-        System.out.println("Thank you for taking a seat!");
+        logger.info("Thank you for taking a seat!");
 
     }
 
