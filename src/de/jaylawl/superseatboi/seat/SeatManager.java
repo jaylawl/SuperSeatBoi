@@ -108,12 +108,12 @@ public class SeatManager {
     public Optional<SeatEntity> getSeatEntityInBlock(@NotNull Block block) {
         World blockWorld = block.getWorld();
         Vector blockMinVector = block.getLocation().toBlockLocation().toVector();
-        BoundingBox voxelBoundingBox = BoundingBox.of(blockMinVector, blockMinVector.clone().add(new Vector(1, 1, 1)));
-        for (SeatEntity seatEntity : getSeatEntities()) {
-            Entity entity = seatEntity.getEntity();
-            Location entityLocation = entity.getLocation();
+        BoundingBox blockBoundingBox = BoundingBox.of(blockMinVector, blockMinVector.clone().add(new Vector(1, 1, 1)));
+        for (final SeatEntity seatEntity : getSeatEntities()) {
+            final Entity entity = seatEntity.getEntity();
+            final Location entityLocation = entity.getLocation();
             if (blockWorld.equals(entityLocation.getWorld())) {
-                if (voxelBoundingBox.contains(entityLocation.toVector())) {
+                if (blockBoundingBox.overlaps(entity.getBoundingBox())) {
                     return Optional.of(seatEntity);
                 }
             }

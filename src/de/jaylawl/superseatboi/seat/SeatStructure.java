@@ -77,7 +77,7 @@ public class SeatStructure {
 
     public @NotNull SeatEntity getOrSpawnSeatEntity() {
         final SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
-        return seatManager.getSeatEntityInBlock(this.seatBlock).orElse(seatManager.spawnSeatEntity(this));
+        return seatManager.getSeatEntityInBlock(this.seatBlock).orElseGet(() -> seatManager.spawnSeatEntity(this));
     }
 
     public boolean hasSeatEntity() {
