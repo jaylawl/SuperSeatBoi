@@ -15,8 +15,8 @@ public class SeatEntity {
     private final Entity entity;
 
     protected SeatEntity(@NotNull Entity entity) {
-        this.uniqueId = entity.getUniqueId();
         this.entity = entity;
+        this.uniqueId = this.entity.getUniqueId();
     }
 
     //
