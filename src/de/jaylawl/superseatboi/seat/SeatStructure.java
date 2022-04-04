@@ -1,7 +1,7 @@
 package de.jaylawl.superseatboi.seat;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
-import de.jaylawl.superseatboi.event.event.PlayerInteractWithSeatStructureEvent;
+import de.jaylawl.superseatboi.event.api.PlayerInteractWithSeatStructureEvent;
 import de.jaylawl.superseatboi.util.ConfigurableSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

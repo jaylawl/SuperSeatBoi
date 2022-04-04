@@ -1,4 +1,4 @@
-package de.jaylawl.superseatboi.event.event;
+package de.jaylawl.superseatboi.event.api;
 
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;

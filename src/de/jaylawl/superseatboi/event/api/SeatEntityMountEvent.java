@@ -1,16 +1,16 @@
-package de.jaylawl.superseatboi.event.event;
+package de.jaylawl.superseatboi.event.api;
 
 import de.jaylawl.superseatboi.seat.SeatEntity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class SeatEntityDismountEvent extends SeatEntityEvent implements Cancellable {
+public class SeatEntityMountEvent extends SeatEntityEvent implements Cancellable {
 
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private boolean cancelled = false;
 
-    public SeatEntityDismountEvent(@NotNull SeatEntity seatEntity) {
+    public SeatEntityMountEvent(@NotNull SeatEntity seatEntity) {
         super(seatEntity);
     }
 

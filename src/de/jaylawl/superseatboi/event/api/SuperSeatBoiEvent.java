@@ -1,4 +1,4 @@
-package de.jaylawl.superseatboi.event.event;
+package de.jaylawl.superseatboi.event.api;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
 import org.bukkit.event.server.PluginEvent;

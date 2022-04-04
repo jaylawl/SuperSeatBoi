@@ -1,7 +1,7 @@
 package de.jaylawl.superseatboi;
 
 import de.jaylawl.superseatboi.command.CommandMaster;
-import de.jaylawl.superseatboi.event.event.SuperSeatBoiPreReloadEvent;
+import de.jaylawl.superseatboi.event.api.SuperSeatBoiPreReloadEvent;
 import de.jaylawl.superseatboi.event.listener.bukkit.BlockListener;
 import de.jaylawl.superseatboi.event.listener.bukkit.EntityListener;
 import de.jaylawl.superseatboi.event.listener.bukkit.PlayerListener;

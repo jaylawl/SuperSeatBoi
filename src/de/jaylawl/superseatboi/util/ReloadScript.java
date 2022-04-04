@@ -1,7 +1,7 @@
 package de.jaylawl.superseatboi.util;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
-import de.jaylawl.superseatboi.event.event.SuperSeatBoiPostReloadEvent;
+import de.jaylawl.superseatboi.event.api.SuperSeatBoiPostReloadEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

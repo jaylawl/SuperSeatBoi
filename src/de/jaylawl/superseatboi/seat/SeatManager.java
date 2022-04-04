@@ -1,7 +1,7 @@
 package de.jaylawl.superseatboi.seat;
 
 import de.jaylawl.superseatboi.SuperSeatBoi;
-import de.jaylawl.superseatboi.event.event.SeatEntitySpawnEvent;
+import de.jaylawl.superseatboi.event.api.SeatEntitySpawnEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
