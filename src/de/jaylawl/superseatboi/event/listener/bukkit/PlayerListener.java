@@ -64,7 +64,7 @@ public class PlayerListener implements Listener {
         }
 
         event.setCancelled(true);
-        seatStructure.onPlayerInteract(player);
+        seatStructure.onInteract(player);
 
     }
 

@@ -76,15 +76,17 @@ public class SeatStructure {
     }
 
     public @NotNull SeatEntity getOrSpawnSeatEntity() {
-        SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
-        return seatManager.getSeatEntityInBlock(this.seatBlock).orElseGet(() -> seatManager.spawnSeatEntity(this));
+        final SeatManager seatManager = SuperSeatBoi.getInstance().getSeatManager();
+        return seatManager.getSeatEntityInBlock(this.seatBlock).orElse(seatManager.spawnSeatEntity(this));
     }
 
     public boolean hasSeatEntity() {
         return getSeatEntity().isPresent();
     }
 
-    public void onPlayerInteract(@NotNull Player player) {
+    //
+
+    public void onInteract(final @NotNull Player player) {
 
         final ConfigurableSettings configurableSettings = SuperSeatBoi.getInstance().getConfigurableSettings();
 
