@@ -109,7 +109,7 @@ public class ReloadScript extends IReloadScript {
 
                 StringBuilder fileComments = new StringBuilder("# \n");
 
-                InputStream inputStream = getClass().getResourceAsStream("/de/jaylawl/superseatboi/resources/config_file_comments.txt");
+                InputStream inputStream = getClass().getResourceAsStream("/config_file_comments.txt");
                 if (inputStream != null) {
                     BufferedReader commentsBufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                     for (String commentLine : commentsBufferedReader.lines().toList()) {

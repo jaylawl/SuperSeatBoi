@@ -1,9 +1,9 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="SuperSeatBoi:jar">
-    <output-path>$PROJECT_DIR$/../__builds</output-path>
+    <output-path>$PROJECT_DIR$/../.builds</output-path>
     <root id="archive" name="SuperSeatBoi.jar">
-      <element id="module-output" name="SuperSeatBoi" />
-      <element id="file-copy" path="$PROJECT_DIR$/src/de/jaylawl/superseatboi/resources/plugin.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+      <element id="module-output" name="SuperSeatBoi.main" />
     </root>
   </artifact>
 </component>

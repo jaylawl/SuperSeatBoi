@@ -42,7 +42,7 @@ public class SeatManager {
         entity.setSilent(true);
         entity.setPersistent(false);
         entity.setRemoveWhenFarAway(true);
-        AttributeInstance maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        AttributeInstance maxHealth = entity.getAttribute(Attribute.MAX_HEALTH);
         if (maxHealth != null) {
             maxHealth.setBaseValue(.01);
         }
