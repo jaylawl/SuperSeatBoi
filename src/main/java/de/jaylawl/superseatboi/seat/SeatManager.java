@@ -8,13 +8,13 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Stairs;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Silverfish;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -35,8 +35,11 @@ public class SeatManager {
 
     public @NotNull SeatEntity spawnSeatEntity(@NotNull SeatStructure seatStructure) {
         Block seatBlock = seatStructure.getSeatBlock();
-        Location location = seatBlock.getLocation().toBlockLocation().add(.5, 0, .5);
-        Silverfish entity = (Silverfish) location.getWorld().spawnEntity(location, SeatEntity.ENTITY_TYPE);
+        // FIXME (09.08.2025): magic values
+        Location location = seatBlock.getLocation().toBlockLocation().toCenterLocation();
+
+        final ArmorStand entity = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+
         entity.setAI(false);
         entity.setInvulnerable(true);
         entity.setSilent(true);
@@ -47,17 +50,22 @@ public class SeatManager {
             maxHealth.setBaseValue(.01);
         }
         entity.addScoreboardTag(SeatEntity.SCOREBOARD_TAG_IDENTIFIER);
-        entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false, false));
+        entity.setGravity(false);
+        entity.setInvisible(true);
+        entity.setSmall(true);
+        entity.setMarker(true);
 
         BlockData blockData = seatBlock.getBlockData();
         if (blockData instanceof Directional directional) {
-            Float yaw = switch (directional.getFacing()) {
+            final BlockFace facing = directional.getFacing();
+            Float yaw = switch (facing) {
                 case NORTH -> 0f;
                 case EAST -> 90f;
                 case SOUTH -> 180f;
                 case WEST -> 270f;
                 default -> null;
             };
+            entity.teleport(entity.getLocation().add(facing.getOppositeFace().getDirection().multiply(0.15)));
             if (yaw != null) {
                 if (blockData instanceof Stairs stairs) {
                     switch (stairs.getShape()) {
